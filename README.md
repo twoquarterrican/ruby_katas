@@ -1,7 +1,10 @@
-Bowling Game Kata in Ruby with Test Unit
-========================================
+Ruby Katas
+==========
 
-This kata is for South Bend Software Craftsmanship meetup "Ruby Thursdays"
+Bowling Game
+------------
+
+Th kata is for South Bend Software Craftsmanship meetup "Ruby Thursdays"
 	http://www.meetup.com/sobesc/
 
 #Inspirations
