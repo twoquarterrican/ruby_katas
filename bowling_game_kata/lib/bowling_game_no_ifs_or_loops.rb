@@ -12,32 +12,60 @@ class BowlingGame
 	def roll pins
 		@rolls << pins
 		compute_bonuses
-		@ball = @ball + 1 + @strike_bonuses.last
+		@ball += 1 + @strike_bonuses.last
 	end
 
 	def score
-		@strike_bonuses[-1] = 0
 		numRolls = @rolls.count-1
-		m = Matrix[
-			Array.new(numRolls, 1), 
-			@spare_bonuses[1..numRolls],
-			@strike_bonuses[1..numRolls]
-		]
-		r = Matrix.column_vector(@rolls[1..numRolls])
-		(Matrix[[1,1,1]]*m*r)[0,0]
+		b = bonus_matrix numRolls
+		r = roll_matrix numRolls
+		sm = score_matrix(b, r)
+		sm[0,0]
 	end
 	
 	private
 
+	def bonus_matrix n
+		Matrix[Array.new(n,1), @spare_bonuses[1..n], @strike_bonuses[1..n]]
+	end
+
+	def roll_matrix n
+		Matrix.column_vector(@rolls[1..n])
+	end
+
+	def score_matrix bonus, rolls
+		Matrix[[1,1,1]]*bonus*rolls
+	end
+
 	def compute_bonuses
 		@strike_bonuses << strike_bonus
-		@spare_bonuses << 
-			(@ball % 2)*(1-@ball/18)*
-				(@rolls[-2] + @rolls[-1])/10 + @strike_bonuses.last
+		@spare_bonuses <<
+			second_ball_of_frame * not_last_frame * last_two_rolls_ten +
+			@strike_bonuses.last
 	end
 
 	def strike_bonus
-		(1 - @ball % 2)*(@rolls[-1]/10)*(1 - @ball/18)
+		first_ball_of_frame  * not_last_frame * last_roll_ten
 	end
-	
+
+	def first_ball_of_frame
+		1 - second_ball_of_frame
+	end
+
+	def second_ball_of_frame
+		@ball % 2
+	end
+
+	def not_last_frame
+		1 - @ball/18
+	end
+
+	def last_roll_ten
+		@rolls[-1]/10
+	end
+
+	def last_two_rolls_ten
+		(@rolls[-1] + @rolls[-2])/10
+	end
+
 end

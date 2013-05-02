@@ -1,13 +1,13 @@
 require_relative 'test_helper'
 
-file = 'meeting'
+file = 'no loops'
 
 case file
 when 'meeting'
 	require 'bowling_game_meeting'
-when 'no_loops'
+when 'no loops'
 	require 'bowling_game_no_ifs_or_loops'
-when 'with_index'
+when 'with index'
 	require 'bowling_game_with_index'
 else
 	require 'bowling_game'
